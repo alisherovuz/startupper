@@ -76,8 +76,13 @@ class ApplicationFlow:
         # Inline "I subscribed" recheck button
         if "callback_query" in update:
             cb = update["callback_query"]
-            if cb.get("data") == "app:checksub":
+            data = cb.get("data", "")
+            if data == "app:checksub":
                 await self._handle_checksub(cb)
+                return True
+            if data == "app:start":
+                await self.tg.answer_callback(cb["id"])
+                await self._start(cb["message"]["chat"]["id"], cb["from"])
                 return True
             return False
 

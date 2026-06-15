@@ -244,6 +244,7 @@ class BotHandler:
              {"text": lang.get("btn_resources"), "callback_data": "menu:resources"}],
             [{"text": lang.get("btn_my_profile"), "callback_data": "menu:profile"},
              {"text": lang.get("btn_my_requests"), "callback_data": "menu:my_requests"}],
+            [{"text": "📝 Ariza topshirish", "callback_data": "app:start"}],
             [{"text": lang.get("btn_change_language"), "callback_data": "menu:language"}],
         ]
         await self.telegram.send_message_with_keyboard(chat_id, text, keyboard)
