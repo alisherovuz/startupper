@@ -119,3 +119,19 @@ class Telegram:
         return await self.send_photo(
             chat_id, photo, caption, reply_markup={"inline_keyboard": keyboard}
         )
+
+    async def send_document(self, chat_id, content: bytes, filename: str, caption: str = "") -> dict:
+        """Upload a file (multipart/form-data) — used by /export for the .xlsx."""
+        files = {
+            "document": (
+                filename,
+                content,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            )
+        }
+        data = {"chat_id": str(chat_id), "caption": caption, "parse_mode": "HTML"}
+        resp = await self.client.post(self.api_url + "sendDocument", data=data, files=files)
+        j = resp.json()
+        if not j.get("ok"):
+            raise TelegramError(f"sendDocument error: {j.get('description', 'Unknown error')}")
+        return j.get("result", {})

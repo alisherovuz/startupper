@@ -155,3 +155,18 @@ INSERT INTO settings (setting_key, setting_value, setting_type, description) VAL
     ('request_expiry_days', '30', 'number', 'Days until a request expires'),
     ('admin_chat_id', '', 'string', 'Admin notification chat ID')
 ON CONFLICT (setting_key) DO NOTHING;
+
+-- ---------- Applications (/apply flow) ----------
+CREATE TABLE IF NOT EXISTS applications (
+    id             BIGSERIAL PRIMARY KEY,
+    telegram_id    BIGINT NOT NULL,
+    username       TEXT,
+    q1_team        TEXT,
+    q2_project     TEXT,
+    q3_problem     TEXT,
+    q4_why_you     TEXT,
+    q5_trello      TEXT,
+    q6_commitment  TEXT,
+    created_at     TIMESTAMP DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_applications_created ON applications (created_at);

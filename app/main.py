@@ -14,6 +14,7 @@ from fastapi import FastAPI, Header, HTTPException, Request
 
 from . import config, db
 from .bot_handler import BotHandler
+from .application_flow import ApplicationFlow
 from .telegram import Telegram
 
 telegram: Telegram | None = None
@@ -25,6 +26,7 @@ DEFAULT_COMMANDS = [
     {"command": "my_requests", "description": "E'lonlarim / My requests"},
     {"command": "resources", "description": "Resurslar / Resources"},
     {"command": "profile", "description": "Profilim / My profile"},
+    {"command": "apply", "description": "Ariza topshirish / Apply"},
     {"command": "language", "description": "Til / Language"},
     {"command": "help", "description": "Yordam / Help"},
 ]
@@ -78,6 +80,11 @@ async def health():
 
 
 async def _process(update: dict):
+    # The application flow (/apply, /export) gets first refusal; if it doesn't
+    # handle the update, the main bot does.
+    flow = ApplicationFlow(telegram)
+    if await flow.maybe_handle(update):
+        return
     handler = BotHandler(telegram)
     await handler.handle(update)
 
