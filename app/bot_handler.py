@@ -240,14 +240,22 @@ class BotHandler:
         text += lang.get("what_to_do")
 
         keyboard = [
+            [{"text": "Jamoa topish 🔍", "callback_data": "menu:jamoa_topish"}],
+            [{"text": "📝 Ariza topshirish", "callback_data": "app:start"}],
+        ]
+        await self.telegram.send_message_with_keyboard(chat_id, text, keyboard)
+
+    async def cmd_jamoa_topish(self, chat_id: int):
+        text = "Jamoa topish 🔍\nIltimos, kerakli bo'limni tanlang:"
+        keyboard = [
             [{"text": lang.get("btn_find_teammate"), "callback_data": "menu:find"},
              {"text": lang.get("btn_post_request"), "callback_data": "menu:post"}],
             [{"text": lang.get("btn_events"), "callback_data": "menu:events"},
              {"text": lang.get("btn_resources"), "callback_data": "menu:resources"}],
             [{"text": lang.get("btn_my_profile"), "callback_data": "menu:profile"},
              {"text": lang.get("btn_my_requests"), "callback_data": "menu:my_requests"}],
-            [{"text": "📝 Ariza topshirish", "callback_data": "app:start"}],
             [{"text": lang.get("btn_change_language"), "callback_data": "menu:language"}],
+            [{"text": lang.get("back_to_menu"), "callback_data": "menu:main"}],
         ]
         await self.telegram.send_message_with_keyboard(chat_id, text, keyboard)
 
@@ -564,6 +572,7 @@ class BotHandler:
             "profile": self.cmd_profile,
             "my_requests": self.cmd_my_requests,
             "language": self.show_language_selection,
+            "jamoa_topish": self.cmd_jamoa_topish,
         }
         handler = routes.get(params)
         if handler:
