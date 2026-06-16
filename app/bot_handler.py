@@ -57,16 +57,10 @@ class BotHandler:
         if not await self.check_subscription(chat_id):
             return
 
-        # Step 3: registration
-        if not self.user["is_registered"]:
-            self.state = await self.get_state(from_["id"])
-            if not self.state or not self.state["state"].startswith("reg:"):
-                await self.start_registration(chat_id)
-                return
-            await self.handle_registration_input(chat_id, text)
-            return
-
         self.state = await self.get_state(from_["id"])
+
+        # No upfront registration gate — info is only collected when a user goes
+        # to post an announcement (see cmd_post_request).
 
         # Photo upload for event creation
         if photo and self.state and self.state["state"] == "admin:event_image":
@@ -75,6 +69,11 @@ class BotHandler:
 
         if text.startswith("/"):
             await self.handle_command(chat_id, text)
+            return
+
+        # Mid-registration (only entered via the "post announcement" path)
+        if self.state and self.state["state"].startswith("reg:"):
+            await self.handle_registration_input(chat_id, text)
             return
 
         if self.state and self.state["state"] != "idle":
@@ -118,9 +117,9 @@ class BotHandler:
 
     # ==================== REGISTRATION ====================
 
-    async def start_registration(self, chat_id: int):
+    async def start_registration(self, chat_id: int, after: str = "menu"):
         await self.telegram.send_message(chat_id, lang.get("registration_welcome"))
-        await self.set_state(self.user["telegram_id"], "reg:full_name")
+        await self.set_state(self.user["telegram_id"], "reg:full_name", {"after": after})
         await self.telegram.send_message(chat_id, lang.get("reg_ask_full_name"))
 
     async def handle_registration_input(self, chat_id: int, text: str):
@@ -169,7 +168,10 @@ class BotHandler:
             await self.set_state(self.user["telegram_id"], "idle")
             await self.telegram.send_message(chat_id, lang.get("reg_success"))
             self.user["is_registered"] = 1
-            await self.cmd_start(chat_id)
+            if data.get("after") == "post":
+                await self.cmd_post_request(chat_id)
+            else:
+                await self.cmd_start(chat_id)
 
     async def show_city_selection(self, chat_id: int):
         keyboard = [
@@ -276,6 +278,11 @@ class BotHandler:
         await self.telegram.send_message_with_keyboard(chat_id, lang.get("find_title"), keyboard)
 
     async def cmd_post_request(self, chat_id: int):
+        # Posting requires a profile — collect it now if they haven't registered.
+        if not self.user["is_registered"]:
+            await self.start_registration(chat_id, after="post")
+            return
+
         max_requests = await Settings.get("max_active_requests", 3)
         active_count = await db.count(
             "teammate_requests",
@@ -497,10 +504,7 @@ class BotHandler:
 
         if data == "check_sub":
             if await self.check_subscription(chat_id):
-                if not self.user["is_registered"]:
-                    await self.start_registration(chat_id)
-                else:
-                    await self.cmd_start(chat_id)
+                await self.cmd_start(chat_id)
             return
 
         if data.startswith("reg_city:"):
@@ -547,9 +551,6 @@ class BotHandler:
         await self.telegram.send_message(chat_id, lang.get("language_set"))
 
         if not await self.check_subscription(chat_id):
-            return
-        if not self.user["is_registered"]:
-            await self.start_registration(chat_id)
             return
         await self.cmd_start(chat_id)
 
