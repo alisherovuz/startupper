@@ -121,6 +121,8 @@ class ApplicationFlow:
     # ============ subscription gate ============
 
     async def _is_subscribed(self, uid: int) -> bool:
+        if not config.APPLY_CHANNEL:
+            return True
         try:
             status = await self.tg.get_chat_member(config.APPLY_CHANNEL, uid)
             return status in ("member", "administrator", "creator")

@@ -40,8 +40,8 @@ ADMIN_CHAT_ID = os.environ.get("ADMIN_CHAT_ID", "").strip()
 
 # --- Registration / application flow (/apply) ---
 # Channel the user must join before applying.
-APPLY_CHANNEL = (os.environ.get("APPLY_CHANNEL", "@uzalisherov").strip() or "@uzalisherov")
-if not APPLY_CHANNEL.startswith("@"):
+APPLY_CHANNEL = os.environ.get("APPLY_CHANNEL", "").strip()
+if APPLY_CHANNEL and not APPLY_CHANNEL.startswith("@"):
     APPLY_CHANNEL = "@" + APPLY_CHANNEL
 # Chat that receives the formatted application report.
 TARGET_CHAT_ID = os.environ.get("TARGET_CHAT_ID", "").strip()
