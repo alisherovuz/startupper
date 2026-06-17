@@ -262,7 +262,7 @@ class ApplicationFlow:
 
     async def _handle_export(self, chat_id: int, from_: dict):
         uid = from_["id"]
-        if config.ADMIN_ID is None or uid != config.ADMIN_ID:
+        if uid not in config.ADMIN_IDS:
             await self.tg.send_message(chat_id, "⛔ Bu buyruq faqat admin uchun.")
             return
 
