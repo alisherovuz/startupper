@@ -170,3 +170,17 @@ CREATE TABLE IF NOT EXISTS applications (
     created_at     TIMESTAMP DEFAULT NOW()
 );
 CREATE INDEX IF NOT EXISTS idx_applications_created ON applications (created_at);
+
+-- ---------- Mafia Registrations ----------
+CREATE TABLE IF NOT EXISTS mafia_registrations (
+    id              BIGSERIAL PRIMARY KEY,
+    telegram_id     BIGINT NOT NULL,
+    username        TEXT,
+    full_name       TEXT,
+    phone_number    TEXT,
+    receipt_file_id TEXT,
+    status          TEXT DEFAULT 'pending',
+    created_at      TIMESTAMP DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_mafia_status ON mafia_registrations (status);
+

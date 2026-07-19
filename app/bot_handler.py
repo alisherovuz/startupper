@@ -241,6 +241,7 @@ class BotHandler:
 
         keyboard = [
             [{"text": "Jamoa topish 🔍", "callback_data": "menu:jamoa_topish"}],
+            [{"text": "📝 Startap Mafiaga ro'yxatdan o'tish", "callback_data": "mafia:start"}],
         ]
         await self.telegram.send_message_with_keyboard(chat_id, text, keyboard)
 
