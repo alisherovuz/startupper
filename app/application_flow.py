@@ -80,10 +80,10 @@ class ApplicationFlow:
             if data == "app:checksub":
                 await self._handle_checksub(cb)
                 return True
-            if data == "app:start":
-                await self.tg.answer_callback(cb["id"])
-                await self._start(cb["message"]["chat"]["id"], cb["from"])
-                return True
+            # if data == "app:start":
+            #     await self.tg.answer_callback(cb["id"])
+            #     await self._start(cb["message"]["chat"]["id"], cb["from"])
+            #     return True
             return False
 
         if "message" not in update:
@@ -99,9 +99,9 @@ class ApplicationFlow:
         if cmd == "/export":
             await self._handle_export(chat_id, from_)
             return True
-        if cmd in ("/apply", "/register"):
-            await self._start(chat_id, from_)
-            return True
+        # if cmd in ("/apply", "/register"):
+        #     await self._start(chat_id, from_)
+        #     return True
 
         # Mid-application?
         st = await _get_state(uid)

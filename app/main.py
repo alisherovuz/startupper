@@ -26,7 +26,6 @@ DEFAULT_COMMANDS = [
     {"command": "my_requests", "description": "E'lonlarim / My requests"},
     {"command": "resources", "description": "Resurslar / Resources"},
     {"command": "profile", "description": "Profilim / My profile"},
-    {"command": "apply", "description": "Ariza topshirish / Apply"},
     {"command": "language", "description": "Til / Language"},
     {"command": "help", "description": "Yordam / Help"},
 ]
