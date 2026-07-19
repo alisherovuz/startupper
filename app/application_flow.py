@@ -84,7 +84,7 @@ class ApplicationFlow:
         uid = from_["id"]
         
         # Check if already registered
-        existing = await db.fetch("SELECT id, status FROM mafia_registrations WHERE telegram_id = ?", uid)
+        existing = await db.fetch("SELECT id, status FROM mafia_registrations WHERE telegram_id = ? ORDER BY id DESC", uid)
         if existing:
             await self.tg.send_message(
                 chat_id, 
