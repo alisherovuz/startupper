@@ -116,7 +116,6 @@ class ApplicationFlow:
                 return
             data["phone"] = phone
             await _set_state(uid, "mafia:receipt", data)
-            await self.tg.remove_keyboard(chat_id, "Kutmoqdamiz...")
             
             card_details = "8600 0000 0000 0000 (Alisher Karimov)"
             amount = "belgilangan summa"
@@ -127,7 +126,7 @@ class ApplicationFlow:
                 f"💰 <b>Summa:</b> {amount}\n\n"
                 f"To'lovni amalga oshirgach, chekni (screenshot) shu yerga rasm qilib yuboring."
             )
-            await self.tg.send_message(chat_id, text_receipt)
+            await self.tg.remove_keyboard(chat_id, text_receipt)
 
         elif state == "mafia:receipt":
             if not photo:
