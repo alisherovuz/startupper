@@ -129,7 +129,7 @@ class ApplicationFlow:
             
             qr_url = "zoomrad_qr.png"
             
-            amount = "belgilangan summa" # TODO: Change this to the actual price
+            amount = "50 000 so'm"
             
             text_receipt = (
                 f"🟣 <b>To'lov:</b> Zoomrad orqali\n"
