@@ -127,13 +127,14 @@ class ApplicationFlow:
             data["phone"] = phone
             await _set_state(uid, "mafia:receipt", data)
             
-            # TODO: Replace this URL with the actual Zoomrad QR code image URL or file_id
             qr_url = "zoomrad_qr.png"
             
+            amount = "belgilangan summa" # TODO: Change this to the actual price
+            
             text_receipt = (
-                f"To'lovlar faqatgina Zoomrad ilovasi orqali amalga oshadi.\n\n"
-                f"Iltimos, to'lovni yuqoridagi QR kod orqali o'tkazing.\n"
-                f"To'lovni amalga oshirgach, chekni (screenshot) shu yerga rasm qilib yuboring."
+                f"🟣 <b>To'lov:</b> Zoomrad orqali\n"
+                f"💰 <b>Summa:</b> {amount}\n\n"
+                f"QR kod orqali to'lab, chekni (screenshot) yuboring."
             )
             await self.tg.send_photo(
                 chat_id, 
