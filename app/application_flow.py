@@ -127,17 +127,20 @@ class ApplicationFlow:
             data["phone"] = phone
             await _set_state(uid, "mafia:receipt", data)
             
-            card_details = "8600 0000 0000 0000 (Alisher Karimov)"
-            amount = "belgilangan summa"
+            # TODO: Replace this URL with the actual Zoomrad QR code image URL or file_id
+            qr_url = "https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=zoomrad"
             
             text_receipt = (
-                f"Iltimos, to'lovni quyidagi kartaga o'tkazing:\n\n"
-                f"💳 <b>Karta:</b> {card_details}\n"
-                f"💰 <b>Summa:</b> {amount}\n\n"
+                f"To'lovlar faqatgina Zoomrad ilovasi orqali amalga oshadi.\n\n"
+                f"Iltimos, to'lovni yuqoridagi QR kod orqali o'tkazing.\n"
                 f"To'lovni amalga oshirgach, chekni (screenshot) shu yerga rasm qilib yuboring."
             )
-            await self.tg.remove_keyboard(chat_id, text_receipt)
-
+            await self.tg.send_photo(
+                chat_id, 
+                qr_url, 
+                caption=text_receipt, 
+                reply_markup={"remove_keyboard": True}
+            )
         elif state == "mafia:receipt":
             if not photo:
                 await self.tg.send_message(chat_id, "Iltimos, to'lov chekini rasm (screenshot) ko'rinishida yuboring.")
