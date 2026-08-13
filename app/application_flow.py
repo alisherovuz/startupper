@@ -83,14 +83,14 @@ class ApplicationFlow:
     async def _start_mafia(self, chat_id: int, from_: dict):
         uid = from_["id"]
         
-        # Check if already registered
-        existing = await db.fetch("SELECT id, status FROM mafia_registrations WHERE telegram_id = ? ORDER BY id DESC", uid)
-        if existing:
-            await self.tg.send_message(
-                chat_id, 
-                f"Siz allaqachon ariza topshirgansiz. Arizangiz holati: {existing['status']}."
-            )
-            return
+        # Check if already registered (Disabled temporarily for testing)
+        # existing = await db.fetch("SELECT id, status FROM mafia_registrations WHERE telegram_id = ? ORDER BY id DESC", uid)
+        # if existing:
+        #     await self.tg.send_message(
+        #         chat_id, 
+        #         f"Siz allaqachon ariza topshirgansiz. Arizangiz holati: {existing['status']}."
+        #     )
+        #     return
 
         await _set_state(uid, "mafia:name", {})
         text = "📝 <b>Startap Mafiaga ro'yxatdan o'tish</b>\n\nIltimos, ism-familiyangizni kiriting:"
