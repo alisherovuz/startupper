@@ -128,7 +128,7 @@ class ApplicationFlow:
             await _set_state(uid, "mafia:receipt", data)
             
             # TODO: Replace this URL with the actual Zoomrad QR code image URL or file_id
-            qr_url = "https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=zoomrad"
+            qr_url = "zoomrad_qr.png"
             
             text_receipt = (
                 f"To'lovlar faqatgina Zoomrad ilovasi orqali amalga oshadi.\n\n"

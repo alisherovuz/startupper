@@ -105,6 +105,24 @@ class Telegram:
         return result.get("status", "left") if isinstance(result, dict) else "left"
 
     async def send_photo(self, chat_id, photo: str, caption: str = "", **options) -> dict:
+        import os
+        import json
+        if os.path.isfile(photo):
+            with open(photo, "rb") as f:
+                # We use a synchronous file read here since it's a small image
+                files = {"photo": f}
+                data = {"chat_id": str(chat_id), "caption": caption, "parse_mode": "HTML"}
+                for k, v in options.items():
+                    if isinstance(v, (dict, list)):
+                        data[k] = json.dumps(v)
+                    else:
+                        data[k] = str(v)
+                try:
+                    resp = await self.client.post(self.api_url + "sendPhoto", data=data, files=files)
+                    return resp.json()
+                except Exception:
+                    pass
+                    
         params = {
             "chat_id": chat_id,
             "photo": photo,
